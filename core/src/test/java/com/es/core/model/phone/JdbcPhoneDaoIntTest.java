@@ -8,7 +8,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -16,7 +18,10 @@ import static org.junit.Assert.*;
 @ContextConfiguration("/context/test-applicationContext-core.xml")
 public class JdbcPhoneDaoIntTest {
     private static final String TABLE_PHONES = "PHONES";
+    private static final String TABLE_STOCKS = "STOCKS";
+    private static final String QUERY_POSITIVE_STOCK = "stock > 0";
     private static final Long EXISTING_PHONE_ID = 1000L;
+    private static final Long EXISTING_PHONE_ID_WITH_ZERO_STOCK = 1002L;
     private static final Long NON_EXISTING_PHONE_ID = 0L;
     @Resource
     private PhoneDao phoneDao;
@@ -46,6 +51,19 @@ public class JdbcPhoneDaoIntTest {
 
         int phonesCount = getPhonesTableRowCount();
         assertEquals(expectedPhonesCount + 1, phonesCount);
+    }
+    @Test
+    public void findAllInStock_fullyPhonesTable_noPhonesWithZeroStock() {
+        int phonesCount = getPhonesTableRowCount();
+        int phonesCountWithPositiveStock = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_STOCKS,
+                QUERY_POSITIVE_STOCK);
+
+        List<Long> phones = phoneDao.findAllInStock(0, phonesCount, null, null, null).stream()
+                .map(Phone::getId)
+                .collect(Collectors.toList());
+
+        assertEquals(phonesCountWithPositiveStock, phones.size());
+        assertFalse(phones.contains(EXISTING_PHONE_ID_WITH_ZERO_STOCK));
     }
 
     @Test

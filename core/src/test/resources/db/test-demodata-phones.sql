@@ -9,5 +9,9 @@ insert into phones (id, brand, model, price, displaySizeInches, weightGr, length
 insert into phone2color (phoneId, colorId) values (1000, 1000);
 insert into phone2color (phoneId, colorId) values (1000, 1001);
 insert into phone2color (phoneId, colorId) values (1000, 1002);
-
 insert into phone2color (phoneId, colorId) values (1001, 1000);
+/* No colors for the phone with 1002 id */
+
+insert into stocks (phoneId, stock, reserved) values (1000, 11, 0);
+insert into stocks (phoneId, stock, reserved) values (1001, 12, 1);
+insert into stocks (phoneId, stock, reserved) values (1002, 0, 2);
