@@ -3,6 +3,9 @@ package com.es.core.model.phone;
 import com.es.core.model.color.ColorDao;
 import com.es.core.model.phone.sortEnam.SortField;
 import com.es.core.model.phone.sortEnam.SortOrder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -24,6 +27,7 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String QUERY_PHONE_BRAND_LIKE = "%' or brand ilike '%";
     private static final String QUERY_PHONES_WITH_POSITIVE_STOCK = " where id in (select phoneId from STOCKS where stock > 0)";
     private static final String QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK = QUERY_SELECT_FROM_PHONES + QUERY_PHONES_WITH_POSITIVE_STOCK;
+    private static final String QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK = "select count(*) from PHONES" + QUERY_PHONES_WITH_POSITIVE_STOCK;
     private static final String SPACE = " ";
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -45,19 +49,32 @@ public class JdbcPhoneDao implements PhoneDao {
         savePhoneColors(phone);
     }
 
-    public List<Phone> findAll(int offset, int limit) {
+    public List<Phone> findAll( int limit, int offset) {
         String query = new StringJoiner(SPACE)
                 .add(QUERY_SELECT_FROM_PHONES)
                 .add(QUERY_USE_LIMIT_OFFSET).toString();
         return jdbcTemplate.query(query, new PhoneMapper(colorDao), limit, offset);
     }
 
-    public List<Phone> findAllInStock(int offset, int limit, String sort, String order, String search) {
+    public List<Phone> findAllInStock(String sort, String order, String search, long limit, long offset) {
         String query = new StringJoiner(SPACE)
                 .add(QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK)
-                .add(getSearchPhonesQueryByOrder(sort, order, search))
+                .add(getSearchOrderQuery(sort, order, search))
                 .add(QUERY_USE_LIMIT_OFFSET).toString();
         return jdbcTemplate.query(query, new PhoneMapper(colorDao), limit, offset);
+    }
+
+    public Page<Phone> findAllInStock(String sort, String order, String search, Pageable pageable) {
+        List<Phone> phones = findAllInStock(sort, order, search, pageable.getPageSize(), pageable.getOffset());
+        Long count = getTotalCount(search);
+        return new PageImpl<>(phones, pageable, count);
+    }
+
+    private Long getTotalCount(String search) {
+        String query = new StringJoiner(SPACE)
+                .add(QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK)
+                .add(getSearchQuery(search)).toString();
+        return jdbcTemplate.queryForObject(query, Long.class);
     }
 
     private void savePhoneColors(final Phone phone) {
@@ -67,15 +84,10 @@ public class JdbcPhoneDao implements PhoneDao {
         jdbcTemplate.batchUpdate(QUERY_INSERT_PHONE_TO_COLOR, phones2Colors);
     }
 
-    private String getSearchPhonesQueryByOrder(String sort, String order, String search) {
+    private String getSearchOrderQuery(String sort, String order, String search) {
         StringJoiner query = new StringJoiner(SPACE);
-        if (Objects.nonNull(search) && !search.isEmpty()) {
-            query.add(new StringBuilder(QUERY_PHONE_MODEL_LIKE)
-                    .append(search)
-                    .append(QUERY_PHONE_BRAND_LIKE)
-                    .append(search)
-                    .append("%')"));
-        }
+        query.add(getSearchQuery(search));
+
         SortField sortField = Optional.ofNullable(sort).map(SortField::valueOfLabel).orElse(null);
         SortOrder sortOrder = Optional.ofNullable(order).map(SortOrder::valueOfLabel).orElse(null);
         if (Objects.nonNull(sortField) && Objects.nonNull(sortOrder)) {
@@ -84,6 +96,19 @@ public class JdbcPhoneDao implements PhoneDao {
                     .add(sortOrder.toString());
         }
         return query.toString();
+    }
+
+    private String getSearchQuery(String search) {
+        StringBuilder searchQuery = new StringBuilder();
+        if (Objects.nonNull(search) && !(search = search.trim()).isEmpty()) {
+            searchQuery
+                     .append(QUERY_PHONE_MODEL_LIKE)
+                     .append(search)
+                     .append(QUERY_PHONE_BRAND_LIKE)
+                     .append(search)
+                     .append("%')");
+        }
+        return searchQuery.toString();
     }
 
 }

@@ -58,7 +58,7 @@ public class JdbcPhoneDaoIntTest {
         int phonesCountWithPositiveStock = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_STOCKS,
                 QUERY_POSITIVE_STOCK);
 
-        List<Long> phones = phoneDao.findAllInStock(0, phonesCount, null, null, null).stream()
+        List<Long> phones = phoneDao.findAllInStock(null, null, null, phonesCount, 0).stream()
                 .map(Phone::getId)
                 .collect(Collectors.toList());
 

@@ -5,18 +5,17 @@
 
 <tags:master pageTitle="Phones"></tags:master>
 <h1>Phones</h1>
-<p>
-    Found
-    <c:out value="${phones.size()}"/> phones.
+<p>Found<c:out value="${phones.totalElements}"/> phones.
 <p></p>
 <form>
     <label>
         <input name="search" value="${param.search}">
     </label>
-    <button>Search</button>
+    <button class="btn btn-dark">Search</button>
 </form>
-<table border="1px">
-    <thead>
+<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"></tags:pager>
+<table class="table table-bordered">
+    <thead class="table-dark">
     <tr>
         <td>Image</td>
         <td>Brand
@@ -40,7 +39,7 @@
         <td>Action</td>
     </tr>
     </thead>
-    <c:forEach var="phone" items="${phones}">
+    <c:forEach var="phone" items="${phones.toList()}">
         <tr>
             <td>
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
@@ -68,3 +67,4 @@
         </tr>
     </c:forEach>
 </table>
+<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"></tags:pager>
