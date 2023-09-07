@@ -1,5 +1,7 @@
 package com.es.core.model.phone;
 
+import com.es.core.model.phone.sortEnam.SortField;
+import com.es.core.model.phone.sortEnam.SortOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +22,12 @@ public class JdbcPhoneDaoIntTest {
     private static final String TABLE_PHONES = "PHONES";
     private static final String TABLE_STOCKS = "STOCKS";
     private static final String QUERY_POSITIVE_STOCK = "stock > 0";
+    private static final String QUERY_SEARCH = "model ilike 'ARCHOS' or brand ilike 'ARCHOS'";
+    private static final String AND = " and ";
+    private static final String QUERY_PHONES_WITH_POSITIVE_STOCK = " id in (select phoneId from STOCKS where stock > 0)";
+    private static final String EXISTING_PHONE_BRAND = "ARCHOS";
     private static final Long EXISTING_PHONE_ID = 1000L;
-    private static final Long EXISTING_PHONE_ID_WITH_ZERO_STOCK = 1002L;
+    private static final Long EXISTING_PHONE_ID_WITH_ZERO_STOCK = 1003L;
     private static final Long NON_EXISTING_PHONE_ID = 0L;
     @Resource
     private PhoneDao phoneDao;
@@ -29,7 +35,7 @@ public class JdbcPhoneDaoIntTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void get_existingPhoneId_getProduct() {
+    public void get_existingPhoneId_getPhone() {
         Optional<Phone> phone = phoneDao.get(EXISTING_PHONE_ID);
 
         assertTrue(phone.isPresent());
@@ -53,12 +59,12 @@ public class JdbcPhoneDaoIntTest {
         assertEquals(expectedPhonesCount + 1, phonesCount);
     }
     @Test
-    public void findAllInStock_fullyPhonesTable_noPhonesWithZeroStock() {
+    public void findAllForSale_fullyPhonesTable_noPhonesWithZeroStock() {
         int phonesCount = getPhonesTableRowCount();
         int phonesCountWithPositiveStock = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_STOCKS,
                 QUERY_POSITIVE_STOCK);
 
-        List<Long> phones = phoneDao.findAllInStock(null, null, null, phonesCount, 0).stream()
+        List<Long> phones = phoneDao.findAllForSale(null, null, null, phonesCount, 0).stream()
                 .map(Phone::getId)
                 .collect(Collectors.toList());
 
@@ -67,22 +73,65 @@ public class JdbcPhoneDaoIntTest {
     }
 
     @Test
-    public void findAll_fullyPhonesTable_notEmptyResult() {
-        int expectedPhonesCount = getPhonesTableRowCount();
+    public void findAllForSale_existingPhoneBrand_foundPhones() {
+        int phonesCount = getPhonesTableRowCount();
+        int suitablePhonesCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_PHONES,
+                QUERY_SEARCH + AND + QUERY_PHONES_WITH_POSITIVE_STOCK);
 
-        int phonesCount = phoneDao.findAll(0, expectedPhonesCount).size();
+        int foundPhonesCount = phoneDao.findAllForSale(null, null,
+                EXISTING_PHONE_BRAND, phonesCount, 0).size();
 
-        assertEquals(expectedPhonesCount, phonesCount);
+        assertEquals(suitablePhonesCount, foundPhonesCount);
     }
 
     @Test
-    public void findAll_emptyPhonesTable_emptyResult() {
+    public void findAllForSale_nonExistingPhoneBrand_foundPhones() {
+        int phonesCount = getPhonesTableRowCount();
+
+        int foundPhonesCount = phoneDao.findAllForSale(null, null,
+                TABLE_STOCKS, phonesCount, 0).size();
+
+        assertEquals(0, foundPhonesCount);
+    }
+
+    @Test
+    public void findAllForSale_sortFieldSortOrder_sortedPhones() {
+        int phonesCount = getPhonesTableRowCount();
+
+        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.PRICE.label, SortOrder.DESC.label,
+                null, phonesCount, 0);
+
+        for (int i = 1; i < foundPhones.size(); i++) {
+            assertTrue(
+                    foundPhones.get(i - 1).getPrice().longValue() >= foundPhones.get(i).getPrice().longValue()
+            );
+        }
+    }
+
+    @Test
+    public void findAllForSale_sortFieldSortOrderExistingPhoneBrand_sortedFoundPhones() {
+        int phonesCount = getPhonesTableRowCount();
+        int suitablePhonesCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_PHONES,
+                QUERY_SEARCH + AND + QUERY_PHONES_WITH_POSITIVE_STOCK);
+
+        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.PRICE.label, SortOrder.ASC.label,
+                EXISTING_PHONE_BRAND, phonesCount, 0);
+
+        assertEquals(suitablePhonesCount, foundPhones.size());
+        for (int i = 1; i < foundPhones.size(); i++) {
+            assertTrue(
+                    foundPhones.get(i - 1).getPrice().longValue() <= foundPhones.get(i).getPrice().longValue()
+            );
+        }
+    }
+
+    @Test
+    public void findAll_fullyPhonesTable_notEmptyResult() {
         int expectedPhonesCount = getPhonesTableRowCount();
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, TABLE_PHONES);
 
-        int phonesCount = phoneDao.findAll(0, expectedPhonesCount).size();
+        int phonesCount = phoneDao.findAll(expectedPhonesCount, 0).size();
 
-        assertEquals(0, phonesCount);
+        assertEquals(expectedPhonesCount, phonesCount);
     }
 
     private int getPhonesTableRowCount() {

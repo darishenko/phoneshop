@@ -26,6 +26,7 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String QUERY_PHONE_MODEL_LIKE = " and (model ilike '%";
     private static final String QUERY_PHONE_BRAND_LIKE = "%' or brand ilike '%";
     private static final String QUERY_PHONES_WITH_POSITIVE_STOCK = " where id in (select phoneId from STOCKS where stock > 0)";
+    private static final String QUERY_PHONES_WITH_NOT_NULL_PRICE = " and price is not NULL";
     private static final String QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK = QUERY_SELECT_FROM_PHONES + QUERY_PHONES_WITH_POSITIVE_STOCK;
     private static final String QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK = "select count(*) from PHONES" + QUERY_PHONES_WITH_POSITIVE_STOCK;
     private static final String SPACE = " ";
@@ -36,8 +37,8 @@ public class JdbcPhoneDao implements PhoneDao {
 
     public Optional<Phone> get(final Long key) {
         List<Phone> phones = jdbcTemplate.query(QUERY_SELECT_PHONE_BY_ID, new PhoneMapper(colorDao), key);
-        if (!phones.isEmpty()){
-           return Optional.of(phones.get(0));
+        if (!phones.isEmpty()) {
+            return Optional.of(phones.get(0));
         }
         return Optional.empty();
     }
@@ -49,30 +50,32 @@ public class JdbcPhoneDao implements PhoneDao {
         savePhoneColors(phone);
     }
 
-    public List<Phone> findAll( int limit, int offset) {
+    public List<Phone> findAll(int limit, int offset) {
         String query = new StringJoiner(SPACE)
                 .add(QUERY_SELECT_FROM_PHONES)
                 .add(QUERY_USE_LIMIT_OFFSET).toString();
         return jdbcTemplate.query(query, new PhoneMapper(colorDao), limit, offset);
     }
 
-    public List<Phone> findAllInStock(String sort, String order, String search, long limit, long offset) {
+    public List<Phone> findAllForSale(String sort, String order, String search, long limit, long offset) {
         String query = new StringJoiner(SPACE)
                 .add(QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK)
+                .add(QUERY_PHONES_WITH_NOT_NULL_PRICE)
                 .add(getSearchOrderQuery(sort, order, search))
                 .add(QUERY_USE_LIMIT_OFFSET).toString();
         return jdbcTemplate.query(query, new PhoneMapper(colorDao), limit, offset);
     }
 
-    public Page<Phone> findAllInStock(String sort, String order, String search, Pageable pageable) {
-        List<Phone> phones = findAllInStock(sort, order, search, pageable.getPageSize(), pageable.getOffset());
-        Long count = getTotalCount(search);
+    public Page<Phone> findAllForSale(String sort, String order, String search, Pageable pageable) {
+        List<Phone> phones = findAllForSale(sort, order, search, pageable.getPageSize(), pageable.getOffset());
+        Long count = getTotalPhonesCountForSale(search);
         return new PageImpl<>(phones, pageable, count);
     }
 
-    private Long getTotalCount(String search) {
+    private Long getTotalPhonesCountForSale(String search) {
         String query = new StringJoiner(SPACE)
                 .add(QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK)
+                .add(QUERY_PHONES_WITH_NOT_NULL_PRICE)
                 .add(getSearchQuery(search)).toString();
         return jdbcTemplate.queryForObject(query, Long.class);
     }
@@ -102,11 +105,11 @@ public class JdbcPhoneDao implements PhoneDao {
         StringBuilder searchQuery = new StringBuilder();
         if (Objects.nonNull(search) && !(search = search.trim()).isEmpty()) {
             searchQuery
-                     .append(QUERY_PHONE_MODEL_LIKE)
-                     .append(search)
-                     .append(QUERY_PHONE_BRAND_LIKE)
-                     .append(search)
-                     .append("%')");
+                    .append(QUERY_PHONE_MODEL_LIKE)
+                    .append(search)
+                    .append(QUERY_PHONE_BRAND_LIKE)
+                    .append(search)
+                    .append("%')");
         }
         return searchQuery.toString();
     }
