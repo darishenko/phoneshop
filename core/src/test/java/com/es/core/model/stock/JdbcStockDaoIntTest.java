@@ -20,14 +20,14 @@ public class JdbcStockDaoIntTest {
 
     @Test
     public void getPhoneStock_positivePhoneStock_getStock() {
-        int stockCount = stockDao.getPhoneStock(PHONE_ID_WITH_POSITIVE_STOCK);
+        int stockCount = stockDao.getPhoneStock(PHONE_ID_WITH_POSITIVE_STOCK).getStock();
 
         assertEquals(PHONE_ID_WITH_POSITIVE_STOCK_COUNT.intValue(), stockCount);
     }
 
     @Test
     public void getPhoneStock_zeroPhoneStock_getStock() {
-        int stockCount = stockDao.getPhoneStock(PHONE_ID_WITH_ZERO_STOCK);
+        int stockCount = stockDao.getPhoneStock(PHONE_ID_WITH_ZERO_STOCK).getStock();
 
         assertEquals(0, stockCount);
     }

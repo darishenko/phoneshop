@@ -39,8 +39,8 @@
         </td>
         <td>Color</td>
         <td>Display size
-            <tags:sortLink sort="displaySize" order="asc"></tags:sortLink>
-            <tags:sortLink sort="displaySize" order="desc"></tags:sortLink>
+            <tags:sortLink sort="displaySizeInches" order="asc"></tags:sortLink>
+            <tags:sortLink sort="displaySizeInches" order="desc"></tags:sortLink>
         </td>
         <td>Price
             <tags:sortLink sort="price" order="asc"></tags:sortLink>
@@ -65,12 +65,10 @@
             <td>${phone.displaySizeInches}''</td>
             <td>${phone.price}$</td>
             <td>
-                <form id="${phone.id}">
-                    <label>
-                        <input value="1" name="quantity">
-                    </label>
-                    <input type="hidden" value="${phone.id}" name="phoneId">
-                </form>
+                <label>
+                    <input value="1" name="quantity" id="quantity${phone.id}">
+                </label>
+                <input type="hidden" value="${phone.id}" name="phoneId">
                 <p id="${phone.id}_addToCartResultMessage" class="addToCartResultMessage"></p>
             </td>
             <td>

@@ -4,6 +4,8 @@ import com.es.core.model.phone.sortEnam.SortField;
 import com.es.core.model.phone.sortEnam.SortOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -64,7 +66,8 @@ public class JdbcPhoneDaoIntTest {
         int phonesCountWithPositiveStock = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_STOCKS,
                 QUERY_POSITIVE_STOCK);
 
-        List<Long> phones = phoneDao.findAllForSale(null, null, null, phonesCount, 0).stream()
+        List<Long> phones = phoneDao.findAllForSale(null, null, null, getPageRequest(phonesCount))
+                .stream()
                 .map(Phone::getId)
                 .collect(Collectors.toList());
 
@@ -78,8 +81,8 @@ public class JdbcPhoneDaoIntTest {
         int suitablePhonesCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_PHONES,
                 QUERY_SEARCH + AND + QUERY_PHONES_WITH_POSITIVE_STOCK);
 
-        int foundPhonesCount = phoneDao.findAllForSale(null, null,
-                EXISTING_PHONE_BRAND, phonesCount, 0).size();
+        long foundPhonesCount = phoneDao.findAllForSale(null, null,
+                EXISTING_PHONE_BRAND, getPageRequest(1)).getTotalElements();
 
         assertEquals(suitablePhonesCount, foundPhonesCount);
     }
@@ -88,8 +91,8 @@ public class JdbcPhoneDaoIntTest {
     public void findAllForSale_nonExistingPhoneBrand_foundPhones() {
         int phonesCount = getPhonesTableRowCount();
 
-        int foundPhonesCount = phoneDao.findAllForSale(null, null,
-                TABLE_STOCKS, phonesCount, 0).size();
+        long foundPhonesCount = phoneDao.findAllForSale(null, null,
+                TABLE_STOCKS, getPageRequest(phonesCount)).getTotalElements();
 
         assertEquals(0, foundPhonesCount);
     }
@@ -98,8 +101,8 @@ public class JdbcPhoneDaoIntTest {
     public void findAllForSale_sortFieldSortOrder_sortedPhones() {
         int phonesCount = getPhonesTableRowCount();
 
-        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.PRICE.label, SortOrder.DESC.label,
-                null, phonesCount, 0);
+        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.price, SortOrder.desc,
+                null, getPageRequest(phonesCount)).toList();
 
         for (int i = 1; i < foundPhones.size(); i++) {
             assertTrue(
@@ -114,8 +117,8 @@ public class JdbcPhoneDaoIntTest {
         int suitablePhonesCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, TABLE_PHONES,
                 QUERY_SEARCH + AND + QUERY_PHONES_WITH_POSITIVE_STOCK);
 
-        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.PRICE.label, SortOrder.ASC.label,
-                EXISTING_PHONE_BRAND, phonesCount, 0);
+        List<Phone> foundPhones = phoneDao.findAllForSale(SortField.price, SortOrder.asc,
+                EXISTING_PHONE_BRAND, getPageRequest(phonesCount)).toList();
 
         assertEquals(suitablePhonesCount, foundPhones.size());
         for (int i = 1; i < foundPhones.size(); i++) {
@@ -123,15 +126,6 @@ public class JdbcPhoneDaoIntTest {
                     foundPhones.get(i - 1).getPrice().longValue() <= foundPhones.get(i).getPrice().longValue()
             );
         }
-    }
-
-    @Test
-    public void findAll_fullyPhonesTable_notEmptyResult() {
-        int expectedPhonesCount = getPhonesTableRowCount();
-
-        int phonesCount = phoneDao.findAll(expectedPhonesCount, 0).size();
-
-        assertEquals(expectedPhonesCount, phonesCount);
     }
 
     private int getPhonesTableRowCount() {
@@ -143,6 +137,10 @@ public class JdbcPhoneDaoIntTest {
         phone.setBrand(brand);
         phone.setModel(model);
         return phone;
+    }
+
+    private Pageable getPageRequest(int phonesCount) {
+        return PageRequest.of(0, phonesCount);
     }
 
 }

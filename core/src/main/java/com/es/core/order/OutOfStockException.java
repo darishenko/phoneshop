@@ -1,27 +1,22 @@
 package com.es.core.order;
 
-import com.es.core.model.phone.Phone;
+import lombok.Data;
 
+@Data
 public class OutOfStockException extends RuntimeException {
-    private final Phone phone;
+    private static final String NOT_ENOUGH_STOCK_ITEMS = "Not enough items in stock!";
+    private final long phoneId;
     private final long requestedQuantity;
-    private final long availableQuantity;
+    private final long stockQuantity;
+    private final long cartQuantity;
+    private final long availableUserQuantity;
 
-    public OutOfStockException(Phone product, long requestedQuantity, long availableQuantity) {
-        this.phone = product;
+    public OutOfStockException(long phoneId, long requestedQuantity, long stockQuantity, long cartQuantity) {
+        super(NOT_ENOUGH_STOCK_ITEMS);
+        this.phoneId = phoneId;
         this.requestedQuantity = requestedQuantity;
-        this.availableQuantity = availableQuantity;
-    }
-
-    public Phone getPhone() {
-        return phone;
-    }
-
-    public long getRequestedQuantity() {
-        return requestedQuantity;
-    }
-
-    public long getAvailableQuantity() {
-        return availableQuantity;
+        this.stockQuantity = stockQuantity;
+        this.cartQuantity = cartQuantity;
+        this.availableUserQuantity = stockQuantity - cartQuantity;
     }
 }

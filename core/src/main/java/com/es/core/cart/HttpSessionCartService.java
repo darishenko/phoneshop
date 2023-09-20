@@ -34,12 +34,12 @@ public class HttpSessionCartService implements CartService {
                     .filter(item -> phoneId.equals(item.getPhone().getId()))
                     .findAny()
                     .orElse(new CartItem(currPhone, 0L));
-            long availablePhoneQuantity = getAvailablePhoneQuantity(phoneId);
-            if (quantity <= availablePhoneQuantity - cartItem.getQuantity()) {
+            long availableQuantity = currPhone.getStock().getStock() - currPhone.getStock().getReserved();
+            if (quantity <= availableQuantity - cartItem.getQuantity()) {
                 addPhoneToCart(cartItem, quantity);
                 recalculateCart(currPhone, quantity);
             } else {
-                throw new OutOfStockException(currPhone, quantity, availablePhoneQuantity);
+                throw new OutOfStockException(currPhone.getId(), quantity, availableQuantity, cartItem.getQuantity());
             }
         }
     }
@@ -52,10 +52,6 @@ public class HttpSessionCartService implements CartService {
     @Override
     public void remove(Long phoneId) {
         throw new UnsupportedOperationException("TODO");
-    }
-
-    private Long getAvailablePhoneQuantity(Long phoneId) {
-        return stockDao.getPhoneStock(phoneId).longValue();
     }
 
     private void addPhoneToCart(CartItem cartItem, Long quantity) {

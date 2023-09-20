@@ -19,7 +19,7 @@ public interface ControllerConstant {
 
     interface Pagination {
         int PAGE_PHONES_COUNT = 10;
-        int DEFAULT_PAGE_NUMBER = 0;
+        String DEFAULT_PAGE_NUMBER = "0";
     }
 
     interface SuccessMessage {
@@ -27,12 +27,8 @@ public interface ControllerConstant {
     }
 
     interface ErrorMessage {
-        String NOT_ENOUGH_IN_STOCK = "Not enough items in stock!";
         String ADD_TO_CART_ERROR = "Adding to cart error.";
-    }
-
-    interface InfoMessage {
-        String AVAILABLE_PHONE_COUNT = "Available count is ";
+        String WRONG_FORMAT = "Wrong format!";
     }
 
 }
