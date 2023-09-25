@@ -1,12 +1,12 @@
-package com.es.core.model.order;
+package com.es.core.cart;
 
 import com.es.core.model.phone.Phone;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class OrderItem {
-    private Long id;
+@AllArgsConstructor
+public class CartItem {
     private Phone phone;
-    private Order order;
     private Long quantity;
 }

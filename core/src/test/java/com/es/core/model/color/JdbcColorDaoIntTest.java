@@ -10,7 +10,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import javax.annotation.Resource;
 import java.util.Set;
 
-import static org.testng.AssertJUnit.*;
+import static org.junit.Assert.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
