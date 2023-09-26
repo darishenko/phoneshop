@@ -14,6 +14,8 @@ const HTML_CLASS_SUCCESS_MESSAGE = "text-success";
 const HTML_CLASS_ERROR_MESSAGE = "text-danger";
 
 function add_to_cart(phoneId, url) {
+    $('.addToCartResultMessage').removeClass(HTML_CLASS_SUCCESS_MESSAGE);
+    $('.addToCartResultMessage').removeClass(HTML_CLASS_ERROR_MESSAGE);
     $('.addToCartResultMessage').hide();
 
     const quantity = document.getElementById(HTML_ID_QUANTITY + phoneId).value;
@@ -51,7 +53,7 @@ function showMessageWithAnimation(messageElement, message, addElementClass) {
     messageElement.show();
 
     setTimeout(function () {
-        messageElement.removeClass(addElementClass);
         messageElement.hide(HIDE_TIME);
+        messageElement.removeClass(addElementClass);
     }, SHOW_TIME);
 }

@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ tag trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ attribute name="pageTitle" required="true" %>
+<%@ attribute name="cart" required="false" type="com.es.core.cart.Cart" %>
 
 <html>
 <head>
@@ -14,7 +16,10 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="${pageContext.servletContext.contextPath}">Phonify</a>
+            <a class="navbar-brand fw-bold fs-1" href="${pageContext.servletContext.contextPath}">Phonify</a>
+            <div class="d-flex">
+                <tags:cart cart="${cart}"></tags:cart>
+            </div>
         </div>
     </nav>
 </header>

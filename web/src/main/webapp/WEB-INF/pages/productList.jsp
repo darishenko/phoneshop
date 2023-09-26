@@ -4,20 +4,10 @@
 <jsp:useBean id="cart" scope="session" class="com.es.core.cart.Cart"/>
 
 
-<tags:master pageTitle="Phones"></tags:master>
-<p>Found <c:out value="${phones.totalElements}"/> phones.
+<tags:master pageTitle="Phones" cart="${cart}"></tags:master>
+<p>Found
+    <c:out value="${phones.totalElements}"/> phones.
 <p></p>
-<div class="card mb-3" style="width: 12rem;">
-    <div class="card-body">
-        <h5 class="card-title">My Cart</h5>
-        <p class="card-text">
-            <span id="cartTotalQuantity">${cart.totalQuantity}</span>
-            <span>item<c:if test="${cart.totalQuantity > 1}">s</c:if></span>
-        </p>
-        <p class="card-text" id="cartTotalCost">${cart.totalCost} $</p>
-        <a href="#" class="btn btn-primary">Go to Cart</a>
-    </div>
-</div>
 <form>
     <label>
         <input name="search" value="${param.search}">
@@ -56,7 +46,11 @@
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
             </td>
             <td>${phone.brand}</td>
-            <td>${phone.model}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/productDetails/${phone.id}">
+                        ${phone.model}
+                </a>
+            </td>
             <td>
                 <c:forEach var="color" items="${phone.colors}">
                     <p>${color.code}</p>

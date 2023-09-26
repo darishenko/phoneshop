@@ -3,10 +3,12 @@ package com.es.phoneshop.web.controller.constant;
 public interface ControllerConstant {
     interface JspPage {
         String PRODUCT_LIST = "productList";
+        String PRODUCT_DETAILS = "productDetails";
     }
 
     interface ModelAttribute {
         String PHONES = "phones";
+        String PHONE = "phone";
         String CART = "cart";
     }
 

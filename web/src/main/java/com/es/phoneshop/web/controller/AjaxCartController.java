@@ -25,7 +25,7 @@ public class AjaxCartController {
     @Resource
     private CartService cartService;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<?> addPhone(@Valid @RequestBody AddToCartDto addToCartDto,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
