@@ -13,7 +13,7 @@ const MESSAGE_AVAILABLE_COUNT = "\nAvailable count is "
 const HTML_CLASS_SUCCESS_MESSAGE = "text-success";
 const HTML_CLASS_ERROR_MESSAGE = "text-danger";
 
-function add_to_cart(phoneId, url) {
+function add_phone_to_cart(phoneId, url) {
     $('.addToCartResultMessage').removeClass(HTML_CLASS_SUCCESS_MESSAGE);
     $('.addToCartResultMessage').removeClass(HTML_CLASS_ERROR_MESSAGE);
     $('.addToCartResultMessage').hide();
@@ -44,6 +44,16 @@ function add_to_cart(phoneId, url) {
             }
             showMessageWithAnimation(messageElement, message, HTML_CLASS_ERROR_MESSAGE);
         }
+    });
+}
+
+function delete_phone_from_cart(phoneId, url) {
+    $.ajax({
+        url: url + "/cart/" + phoneId,
+        method: "DELETE",
+        success: function () {
+            window.location.replace( url + "/cart");
+        },
     });
 }
 

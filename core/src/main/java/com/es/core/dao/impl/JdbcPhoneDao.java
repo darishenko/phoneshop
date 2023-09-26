@@ -1,9 +1,12 @@
-package com.es.core.model.phone;
+package com.es.core.dao.impl;
 
-import com.es.core.model.color.ColorDao;
+import com.es.core.dao.ColorDao;
+import com.es.core.dao.impl.mapper.PhoneMapper;
+import com.es.core.model.phone.Phone;
+import com.es.core.dao.PhoneDao;
 import com.es.core.model.phone.sortEnam.SortField;
 import com.es.core.model.phone.sortEnam.SortOrder;
-import com.es.core.model.stock.StockDao;
+import com.es.core.dao.StockDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,7 +30,7 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String QUERY_ORDER_BY = " order by";
     private static final String QUERY_PHONE_MODEL_LIKE = " and (model ilike '%";
     private static final String QUERY_PHONE_BRAND_LIKE = "%' or brand ilike '%";
-    private static final String QUERY_PHONES_WITH_POSITIVE_STOCK = " where id in (select phoneId from STOCKS where stock > 0)";
+    private static final String QUERY_PHONES_WITH_POSITIVE_STOCK = " where id in (select phoneId from STOCKS where stock > reserved)";
     private static final String QUERY_PHONES_WITH_NOT_NULL_PRICE = " and price is not NULL";
     private static final String QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK = QUERY_SELECT_FROM_PHONES + QUERY_PHONES_WITH_POSITIVE_STOCK;
     private static final String QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK = "select count(*) from PHONES" + QUERY_PHONES_WITH_POSITIVE_STOCK;

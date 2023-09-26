@@ -1,8 +1,9 @@
-package com.es.core.model.phone;
+package com.es.core.dao.impl.mapper;
 
 
-import com.es.core.model.color.ColorDao;
-import com.es.core.model.stock.StockDao;
+import com.es.core.dao.ColorDao;
+import com.es.core.model.phone.Phone;
+import com.es.core.dao.StockDao;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;

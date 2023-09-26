@@ -1,5 +1,7 @@
-package com.es.core.model.color;
+package com.es.core.dao.impl;
 
+import com.es.core.dao.ColorDao;
+import com.es.core.model.color.Color;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.jdbc.core.JdbcTemplate;

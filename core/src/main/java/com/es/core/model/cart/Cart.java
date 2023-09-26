@@ -1,4 +1,4 @@
-package com.es.core.cart;
+package com.es.core.model.cart;
 
 import lombok.Data;
 import org.springframework.context.annotation.Scope;

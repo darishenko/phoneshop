@@ -1,14 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<jsp:useBean id="cart" scope="session" class="com.es.core.cart.Cart"/>
+<jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
 
 
 <tags:master pageTitle="Phones" cart="${cart}"></tags:master>
-<p>Found
+<p class="text-center">Found
     <c:out value="${phones.totalElements}"/> phones.
 <p></p>
-<form>
+<form class="text-center">
     <label>
         <input name="search" value="${param.search}">
     </label>
@@ -66,7 +66,9 @@
                 <p id="${phone.id}_addToCartResultMessage" class="addToCartResultMessage"></p>
             </td>
             <td>
-                <button onclick="add_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to</button>
+                <button onclick="add_phone_to_cart(${phone.id}, '${pageContext.request.contextPath}')"
+                        class="btn btn-outline-success">Add to
+                </button>
             </td>
         </tr>
     </c:forEach>

@@ -16,7 +16,7 @@
     int dif = TOTAL_COUNT - pageRange;
 
     if (count >= TOTAL_COUNT && dif > 0) {
-        if (startPageNumber <= PREV_COUNT) {
+        if (startPageNumber < PREV_COUNT) {
             lastPageNumber += dif;
         } else {
             startPageNumber -= dif;

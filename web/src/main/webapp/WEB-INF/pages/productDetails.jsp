@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<jsp:useBean id="cart" scope="session" class="com.es.core.cart.Cart"/>
+<jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
 <style>
     .fixed-width-table th,
     .fixed-width-table td {
@@ -32,7 +32,7 @@
                     <p id="${phone.id}_addToCartResultMessage" class="addToCartResultMessage"></p>
                     <div class="mt-2">
                         <button class="btn btn-primary"
-                                onclick="add_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to cart
+                                onclick="add_phone_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to cart
                         </button>
                     </div>
                 </div>
