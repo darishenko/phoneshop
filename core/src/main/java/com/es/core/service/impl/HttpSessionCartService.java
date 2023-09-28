@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class HttpSessionCartService implements CartService {
@@ -41,12 +38,6 @@ public class HttpSessionCartService implements CartService {
         } else {
             throw new OutOfStockException(phone.getId(), quantity, availableQuantity, cartItem.getQuantity());
         }
-    }
-
-    @Override
-    public void update(Map<Long, Long> items) {
-        cart.setItems(getAvailableCartItems(items));
-        recalculateCart();
     }
 
     @Override
@@ -103,22 +94,6 @@ public class HttpSessionCartService implements CartService {
                 .filter(item -> phoneId.equals(item.getPhone().getId()))
                 .findAny()
                 .orElse(null);
-    }
-
-    private List<CartItem> getAvailableCartItems(Map<Long, Long> items) {
-        return items.entrySet().stream()
-                .map(item -> getCartItem(item.getKey(), item.getValue()))
-                .collect(Collectors.toList());
-    }
-
-    private CartItem getCartItem(Long phoneId, Long quantity) {
-        Phone phone = phoneService.get(phoneId);
-        long availableQuantity = getAvailablePhoneQuantity(phone);
-        if (quantity <= availableQuantity) {
-            return new CartItem(phone, quantity);
-        } else {
-            throw new OutOfStockException(phone.getId(), quantity, availableQuantity);
-        }
     }
 
 }

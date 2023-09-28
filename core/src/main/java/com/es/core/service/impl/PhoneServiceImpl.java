@@ -5,14 +5,15 @@ import com.es.core.exception.PhoneNotFoundException;
 import com.es.core.model.phone.Phone;
 import com.es.core.model.phone.sortEnam.SortField;
 import com.es.core.model.phone.sortEnam.SortOrder;
+import com.es.core.service.PhoneService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-@Component
-public class PhoneServiceImpl implements com.es.core.service.PhoneService {
+@Service
+public class PhoneServiceImpl implements PhoneService {
     @Resource
     private PhoneDao phoneDao;
 

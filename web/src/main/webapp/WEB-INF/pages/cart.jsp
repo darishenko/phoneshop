@@ -14,23 +14,11 @@
     <table class="table table-bordered">
         <thead class="table-dark">
         <tr>
-            <td>Brand
-                <tags:sortLink sort="brand" order="asc"></tags:sortLink>
-                <tags:sortLink sort="brand" order="desc"></tags:sortLink>
-            </td>
-            <td>Model
-                <tags:sortLink sort="model" order="asc"></tags:sortLink>
-                <tags:sortLink sort="model" order="desc"></tags:sortLink>
-            </td>
+            <td>Brand</td>
+            <td>Model</td>
             <td>Color</td>
-            <td>Display size
-                <tags:sortLink sort="displaySizeInches" order="asc"></tags:sortLink>
-                <tags:sortLink sort="displaySizeInches" order="desc"></tags:sortLink>
-            </td>
-            <td>Price
-                <tags:sortLink sort="price" order="asc"></tags:sortLink>
-                <tags:sortLink sort="price" order="desc"></tags:sortLink>
-            </td>
+            <td>Display size</td>
+            <td>Price</td>
             <td>Quantity</td>
             <td>Action</td>
         </tr>
