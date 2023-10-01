@@ -1,9 +1,9 @@
 package com.es.phoneshop.web.controller;
 
-import com.es.core.cart.CartService;
-import com.es.core.order.OutOfStockException;
-import com.es.phoneshop.web.dto.AddToCartDto;
+import com.es.core.service.CartService;
+import com.es.core.exception.OutOfStockException;
 import com.es.phoneshop.web.dto.AddToCartResponseDto;
+import com.es.phoneshop.web.dto.CartItemDto;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.Valid;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -25,15 +25,15 @@ public class AjaxCartController {
     @Resource
     private CartService cartService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> addPhone(@Valid @RequestBody AddToCartDto addToCartDto,
+    @PostMapping
+    public ResponseEntity<?> addPhone(@Valid @RequestBody CartItemDto cartItemDto,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = getQuantityErrorMessage(bindingResult);
             return ResponseEntity.badRequest().body(errorMessage);
         }
         try {
-            cartService.addPhone(addToCartDto.getPhoneId(), addToCartDto.getQuantity());
+            cartService.addPhone(cartItemDto.getPhoneId(), cartItemDto.getQuantity());
             return ResponseEntity.ok(createAddToCartResponse());
         } catch (OutOfStockException exception) {
             return ResponseEntity.badRequest().body(exception);

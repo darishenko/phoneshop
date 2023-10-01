@@ -1,6 +1,7 @@
-package com.es.core.model.stock;
+package com.es.core.dao.impl;
 
-import com.es.core.model.color.Color;
+import com.es.core.model.stock.Stock;
+import com.es.core.dao.StockDao;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

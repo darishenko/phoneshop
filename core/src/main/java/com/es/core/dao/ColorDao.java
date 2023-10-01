@@ -1,4 +1,6 @@
-package com.es.core.model.color;
+package com.es.core.dao;
+
+import com.es.core.model.color.Color;
 
 import java.util.Set;
 

@@ -1,24 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<jsp:useBean id="cart" scope="session" class="com.es.core.cart.Cart"/>
+<jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
 
 
-<tags:master pageTitle="Phones"></tags:master>
-<p>Found <c:out value="${phones.totalElements}"/> phones.
+<tags:master pageTitle="Phones" cart="${cart}"></tags:master>
+<p class="text-center">Found
+    <c:out value="${phones.totalElements}"/> phones.
 <p></p>
-<div class="card mb-3" style="width: 12rem;">
-    <div class="card-body">
-        <h5 class="card-title">My Cart</h5>
-        <p class="card-text">
-            <span id="cartTotalQuantity">${cart.totalQuantity}</span>
-            <span>item<c:if test="${cart.totalQuantity > 1}">s</c:if></span>
-        </p>
-        <p class="card-text" id="cartTotalCost">${cart.totalCost} $</p>
-        <a href="#" class="btn btn-primary">Go to Cart</a>
-    </div>
-</div>
-<form>
+<form class="text-center">
     <label>
         <input name="search" value="${param.search}">
     </label>
@@ -56,7 +46,11 @@
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
             </td>
             <td>${phone.brand}</td>
-            <td>${phone.model}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/productDetails/${phone.id}">
+                        ${phone.model}
+                </a>
+            </td>
             <td>
                 <c:forEach var="color" items="${phone.colors}">
                     <p>${color.code}</p>
@@ -72,7 +66,9 @@
                 <p id="${phone.id}_addToCartResultMessage" class="addToCartResultMessage"></p>
             </td>
             <td>
-                <button onclick="add_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to</button>
+                <button onclick="add_phone_to_cart(${phone.id}, '${pageContext.request.contextPath}')"
+                        class="btn btn-outline-success">Add to
+                </button>
             </td>
         </tr>
     </c:forEach>
