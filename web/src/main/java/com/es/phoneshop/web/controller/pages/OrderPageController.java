@@ -10,7 +10,6 @@ import com.es.phoneshop.web.controller.constant.ControllerConstant.ModelsAttribu
 import com.es.phoneshop.web.controller.constant.ControllerConstant.JspPage;
 import com.es.phoneshop.web.dto.OrderDetailsDto;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -31,8 +32,6 @@ public class OrderPageController {
 
     @GetMapping
     public String getOrder(@ModelAttribute OrderDetailsDto orderDetails, Model model) throws OutOfStockException {
-        Order order = orderService.createOrder(cartService.getCart());
-        orderDetails.setDeliveryPrice(order.getDeliveryPrice());
         setModelAttributes(orderDetails, model);
         return JspPage.ORDER;
     }
@@ -42,11 +41,13 @@ public class OrderPageController {
                              Model model) throws OutOfStockException {
         setModelAttributes(orderDetails, model);
         if (cartService.getCart().getItems().isEmpty()) {
+            orderDetails.setResultMessage(ErrorMessage.EMPTY_CART);
             return JspPage.ORDER;
         }
         if (!bindingResult.hasErrors()) {
             return tryPlaceOrderAndRedirect(orderDetails);
         }
+        orderDetails.setErrors(getErrorsMessages(bindingResult));
         return JspPage.ORDER;
     }
 
@@ -68,7 +69,15 @@ public class OrderPageController {
     }
 
     private void setModelAttributes(OrderDetailsDto orderDetails, Model model) {
+        Order order = orderService.createOrder(cartService.getCart());
+        orderDetails.setDeliveryPrice(order.getDeliveryPrice());
         model.addAttribute(ModelsAttribute.ORDER_DETAIL_DTO, orderDetails);
         model.addAttribute(ModelsAttribute.CART, cartService.getCart());
+    }
+
+    private Map<String, String> getErrorsMessages(BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+        bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        return errors;
     }
 }

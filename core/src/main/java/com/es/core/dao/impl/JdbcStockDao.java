@@ -28,7 +28,7 @@ public class JdbcStockDao implements StockDao {
     }
 
     @Override
-    public Integer getAvailableOrderCount(Long phoneId) {
+    public Integer getAvailableCountForOrder(Long phoneId) {
         return jdbcTemplate.queryForObject(QUERY_AVAILABLE_COUNT_FOR_ORDER, Integer.class, phoneId);
     }
 

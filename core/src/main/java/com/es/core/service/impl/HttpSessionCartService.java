@@ -72,10 +72,10 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
-    public void updateCartBeforeOrder() throws OutOfStockException{
+    public void updateCartBeforeOrder() throws OutOfStockException {
         List<CartItem> updatedCartItems = cart.getItems().stream()
                 .filter(cartItem ->
-                        stockService.getAvailableOrderCount(cartItem.getPhone().getId()) >= cartItem.getQuantity())
+                        stockService.getAvailableCountForOrder(cartItem.getPhone().getId()) >= cartItem.getQuantity())
                 .collect(Collectors.toList());
         boolean isUpdated = cart.getItems().size() != updatedCartItems.size();
         cart.setItems(updatedCartItems);
@@ -88,8 +88,7 @@ public class HttpSessionCartService implements CartService {
     @Override
     public void clearCart() {
         cart.getItems().clear();
-        cart.setTotalQuantity(0L);
-        cart.setTotalCost(BigDecimal.ZERO);
+        recalculateCart();
     }
 
     private Integer getAvailablePhoneQuantity(Phone phone) {

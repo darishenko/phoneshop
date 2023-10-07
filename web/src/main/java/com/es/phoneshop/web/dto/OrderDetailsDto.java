@@ -4,28 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetailsDto {
-    @NotNull(message = "The value is required.")
-    @Pattern(regexp = "^[a-z, A-Z]+$", message = "Field should consist only of letters.")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Field must contain only letters.")
     private String firstName;
-    @NotNull(message = "The value is required.")
-    @Pattern(regexp = "^[a-z, A-Z]+$", message = "Field should consist only of letters.")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Field must contain only letters.")
     private String lastName;
-    @NotNull(message = "The value is required.")
-    @Pattern(regexp = "^[a-z, A-Z]+$", message = "Field should consist only of letters.")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Field must contain only letters and numbers.")
     private String deliveryAddress;
-    @NotNull(message = "The value is required.")
     @Pattern(regexp = "^\\+\\d{12}$",
-            message = "Invalid format.\n Phone number should start from '+' and consist of 12 digits.")
+            message = "Invalid format.\n Phone number must start from '+' and consist of 12 digits.")
     private String contactPhoneNo;
     private String additionalInfo;
     private String resultMessage;
     private BigDecimal deliveryPrice;
+    private Map<String, String> errors;
 }

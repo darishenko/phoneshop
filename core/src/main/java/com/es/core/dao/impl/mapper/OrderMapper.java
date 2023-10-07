@@ -11,13 +11,13 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Collections;
 
 @AllArgsConstructor
 public class OrderMapper implements RowMapper<Order> {
     public static final String COLUMN_ORDER_ID = "ORDERS.ID";
     public static final String COLUMN_ORDER_ITEM_ID = "ORDER_ITEMS.ID";
-    public static final String COLUMN_ORDER_ITEM_QUANTITY = "QUANTITY";
+    public static final String COLUMN_ORDER_ITEM_QUANTITY = "ORDER_ITEMS.QUANTITY";
     private final ColorDao colorDao;
     private final StockDao stockDao;
 
@@ -28,8 +28,7 @@ public class OrderMapper implements RowMapper<Order> {
         OrderItem orderItem = mapOrderItem(resultSet);
         orderItem.setPhone(phone);
         orderItem.setOrder(order);
-        order.setOrderItems(new ArrayList<>());
-        order.getOrderItems().add(orderItem);
+        order.setOrderItems(Collections.singletonList(orderItem));
         return order;
     }
 

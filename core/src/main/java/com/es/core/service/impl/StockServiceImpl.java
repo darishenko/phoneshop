@@ -1,7 +1,6 @@
 package com.es.core.service.impl;
 
 import com.es.core.dao.StockDao;
-import com.es.core.dao.impl.JdbcStockDao;
 import com.es.core.model.stock.Stock;
 import com.es.core.service.StockService;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Integer getAvailableOrderCount(Long phoneId) {
-        return stockDao.getAvailableOrderCount(phoneId);
+    public Integer getAvailableCountForOrder(Long phoneId) {
+        return stockDao.getAvailableCountForOrder(phoneId);
     }
 }

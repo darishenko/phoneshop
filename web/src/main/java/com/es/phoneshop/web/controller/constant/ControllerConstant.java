@@ -34,12 +34,12 @@ public interface ControllerConstant {
     interface SuccessMessage {
         String ADD_TO_CART = "Phone added to cart successfully!";
         String UPDATE = "Updated successfully!";
-        String ACCEPTED_ORDER = "Your order has been accepted!";
     }
 
     interface ErrorMessage {
         String ADD_TO_CART_ERROR = "Adding to cart error.";
         String WRONG_FORMAT = "Wrong format!";
+        String EMPTY_CART = "Cart is empty!";
         String ORDER_ERROR = "Some items were out of stock! They were deleted from cart.\nTry to make your order again!";
     }
 

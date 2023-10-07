@@ -24,7 +24,7 @@
             </th>
             <td>
                 <form:input path="firstName"/>
-                <form:errors path="firstName"/>
+                <p class="text-danger">${orderDetails.errors.get('firstName')}</p>
             </td>
         </tr>
         <tr>
@@ -33,7 +33,7 @@
             </th>
             <td>
                 <form:input path="lastName"/>
-                <form:errors path="lastName" cssClass="text-danger"/>
+                <p class="text-danger">${orderDetails.errors.get('lastName')}</p>
             </td>
         </tr>
         <tr>
@@ -42,7 +42,7 @@
             </th>
             <td>
                 <form:input path="deliveryAddress"/>
-                <form:errors path="deliveryAddress" cssClass="text-danger"/>
+                <p class="text-danger">${orderDetails.errors.get('deliveryAddress')}</p>
             </td>
         </tr>
         <tr>
@@ -51,7 +51,7 @@
             </th>
             <td>
                 <form:input path="contactPhoneNo"/>
-                <form:errors path="contactPhoneNo" cssClass="text-danger"/>
+                <p class="text-danger">${orderDetails.errors.get('contactPhoneNo')}</p>
             </td>
         </tr>
         <tr>
@@ -62,7 +62,6 @@
                 <form:textarea path="additionalInfo"/>
             </td>
         </tr>
-
         </tbody>
     </table>
 

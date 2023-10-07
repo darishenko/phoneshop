@@ -7,7 +7,7 @@ import java.util.Map;
 public interface StockDao {
     Stock getPhoneStock(Long phoneId);
 
-    Integer getAvailableOrderCount(Long phoneId);
+    Integer getAvailableCountForOrder(Long phoneId);
 
     void reducePhonesStock(Map<Long, Long> reducedItems);
 }
