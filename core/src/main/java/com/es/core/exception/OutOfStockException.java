@@ -1,8 +1,10 @@
 package com.es.core.exception;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor(force = true)
 public class OutOfStockException extends RuntimeException {
     private static final String NOT_ENOUGH_STOCK_ITEMS = "Not enough items in stock!";
     private final long phoneId;

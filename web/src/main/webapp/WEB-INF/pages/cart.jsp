@@ -9,9 +9,10 @@
 <tags:master pageTitle="Phones" cart="${cart}"></tags:master>
 <a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
+<a href="${pageContext.request.contextPath}/order" class="btn btn-primary btn-lg">Order</a>
 
 <form:form modelAttribute="cartDto" method="PUT">
-    <table class="table table-bordered">
+    <table class="table table-bordered my-3">
         <thead class="table-dark">
         <tr>
             <td>Brand</td>
@@ -60,4 +61,5 @@
     </table>
 
     <input type="submit" value="Update" class="btn btn-primary btn-lg"/>
+    <a href="${pageContext.request.contextPath}/order" class="btn btn-primary btn-lg">Order</a>
 </form:form>

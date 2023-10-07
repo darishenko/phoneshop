@@ -5,6 +5,8 @@ public interface ControllerConstant {
         String PRODUCT_LIST = "productList";
         String PRODUCT_DETAILS = "productDetails";
         String CART = "cart";
+        String ORDER = "order";
+        String ORDER_OVERVIEW = "orderOverview";
     }
 
     interface ModelsAttribute {
@@ -12,6 +14,8 @@ public interface ControllerConstant {
         String PHONE = "phone";
         String CART = "cart";
         String CART_DTO = "cartDto";
+        String ORDER_DETAIL_DTO = "orderDetails";
+        String ORDER = "order";
     }
 
     interface RequestParameter {
@@ -30,11 +34,13 @@ public interface ControllerConstant {
     interface SuccessMessage {
         String ADD_TO_CART = "Phone added to cart successfully!";
         String UPDATE = "Updated successfully!";
+        String ACCEPTED_ORDER = "Your order has been accepted!";
     }
 
     interface ErrorMessage {
         String ADD_TO_CART_ERROR = "Adding to cart error.";
         String WRONG_FORMAT = "Wrong format!";
+        String ORDER_ERROR = "Some items were out of stock! They were deleted from cart.\nTry to make your order again!";
     }
 
 }

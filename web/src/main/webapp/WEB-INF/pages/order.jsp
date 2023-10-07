@@ -1,0 +1,70 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%--@elvariable id="orderDetails" type="com.es.phoneshop.web.dto.OrderDetailsDto"--%>
+<jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
+
+
+<tags:master pageTitle="Order" cart="${cart}"/>
+<a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
+    list</a>
+
+<form:form modelAttribute="orderDetails" method="POST">
+    <c:set var="total" value="${cart.totalCost.add(orderDetails.deliveryPrice)}"/>
+    <tags:orderItemsList itemsList="${cart.items}" subtotal="${cart.totalCost}" delivery="${orderDetails.deliveryPrice}"
+                         total="${total}"/>
+
+    <h4 class="text-danger my-3 text-bold">${orderDetails.resultMessage}</h4>
+    <table class="table table-bordered fixed-width-table w-50">
+        <tbody>
+        <tr>
+            <th scope="row">
+                <label for="firstName">First Name*</label>
+            </th>
+            <td>
+                <form:input path="firstName"/>
+                <form:errors path="firstName"/>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <label for="lastName">Last Name*</label>
+            </th>
+            <td>
+                <form:input path="lastName"/>
+                <form:errors path="lastName" cssClass="text-danger"/>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <label for="deliveryAddress">Address*</label>
+            </th>
+            <td>
+                <form:input path="deliveryAddress"/>
+                <form:errors path="deliveryAddress" cssClass="text-danger"/>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <label for="contactPhoneNo">Phone*</label>
+            </th>
+            <td>
+                <form:input path="contactPhoneNo"/>
+                <form:errors path="contactPhoneNo" cssClass="text-danger"/>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <label for="additionalInfo">Additional information</label>
+            </th>
+            <td>
+                <form:textarea path="additionalInfo"/>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <input type="submit" value="Order" class="btn btn-primary btn-lg my-3"/>
+</form:form>
