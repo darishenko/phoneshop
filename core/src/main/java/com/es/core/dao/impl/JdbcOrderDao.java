@@ -29,14 +29,11 @@ public class JdbcOrderDao implements OrderDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
     @Resource
-    private ColorDao colorDao;
-    @Resource
-    private StockDao stockDao;
+    private OrderMapper orderMapper;
 
     @Override
     public Optional<Order> getBySecureId(UUID secureId) {
-        List<Order> orders = jdbcTemplate.query(QUERY_SELECT_ORDER_BY_SECURE_ID, new OrderMapper(colorDao, stockDao),
-                secureId.toString());
+        List<Order> orders = jdbcTemplate.query(QUERY_SELECT_ORDER_BY_SECURE_ID, orderMapper, secureId.toString());
         if (!orders.isEmpty()) {
             orders.get(0).setOrderItems(getAllOrderItems(orders));
             return Optional.of(orders.get(0));

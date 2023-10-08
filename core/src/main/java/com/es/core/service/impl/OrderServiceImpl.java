@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,13 +30,16 @@ public class OrderServiceImpl implements OrderService {
     private CartService cartService;
     @Resource
     private StockDao stockDao;
-    @Value(value = "${delivery.price}")
+    @Value("${delivery.price}")
     private BigDecimal deliveryPrice;
 
     @Override
     public Order createOrder(Cart cart) {
         Order order = new Order();
-        setOrderInfo(order, cart);
+        order.setOrderItems(getOrderItemsFromCart(cart, order));
+        order.setSubtotal(cart.getTotalCost());
+        order.setDeliveryPrice(deliveryPrice);
+        order.setTotalPrice(order.getSubtotal().add(order.getDeliveryPrice()));
         return order;
     }
 
@@ -52,22 +54,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderBySecureId(String secureId) throws OrderNotFoundException {
-        UUID uuid = UUID.fromString(secureId);
-        return orderDao.getBySecureId(uuid).orElseThrow(() -> new OrderNotFoundException(uuid));
+    public Order getOrderBySecureId(UUID secureId) throws OrderNotFoundException {
+        return orderDao.getBySecureId(secureId).orElseThrow(() -> new OrderNotFoundException(secureId));
     }
 
     private List<OrderItem> getOrderItemsFromCart(Cart cart, Order order) {
         return cart.getItems().stream()
                 .map(cartItem -> new OrderItem(cartItem.getPhone(), cartItem.getQuantity(), order))
                 .collect(Collectors.toList());
-    }
-
-    private void setOrderInfo(Order order, Cart cart) {
-        order.setOrderItems(getOrderItemsFromCart(cart, order));
-        order.setSubtotal(cart.getTotalCost());
-        order.setDeliveryPrice(deliveryPrice);
-        order.setTotalPrice(order.getSubtotal().add(order.getDeliveryPrice()));
     }
 
     private void setOrderDetails(Order order, OrderDetails orderDetails) {
@@ -81,8 +75,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Map<Long, Long> getReducedItems(Order order) {
-        Map<Long, Long> reducedItems = new HashMap<>();
-        order.getOrderItems().forEach(item -> reducedItems.put(item.getPhone().getId(), item.getQuantity()));
-        return reducedItems;
+        return order.getOrderItems().stream()
+                .collect(Collectors.toMap(item -> item.getPhone().getId(), OrderItem::getQuantity));
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/orderOverview")
@@ -21,7 +22,7 @@ public class OrderOverviewPageController {
     private OrderService orderService;
 
     @GetMapping("/{orderSecureId}")
-    public String getOrderOverview(@PathVariable String orderSecureId, Model model) {
+    public String getOrderOverview(@PathVariable UUID orderSecureId, Model model) {
         model.addAttribute(ModelsAttribute.CART, cartService.getCart());
         model.addAttribute(ModelsAttribute.ORDER, orderService.getOrderBySecureId(orderSecureId));
         return JspPage.ORDER_OVERVIEW;
