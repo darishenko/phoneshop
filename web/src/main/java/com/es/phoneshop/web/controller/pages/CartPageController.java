@@ -35,7 +35,9 @@ public class CartPageController {
 
     @PutMapping
     public String updateCart(@Valid @ModelAttribute CartDto cartDto, BindingResult bindingResult, Model model) {
-        tryToUpdateAllCartItemsSeparately(cartDto, bindingResult);
+        if (Objects.nonNull(cartDto.getCartItems())) {
+            tryToUpdateAllCartItemsSeparately(cartDto, bindingResult);
+        }
         setCartModelAttributes(model, cartDto);
         return JspPage.CART;
     }

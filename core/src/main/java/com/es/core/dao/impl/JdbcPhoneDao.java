@@ -1,12 +1,10 @@
 package com.es.core.dao.impl;
 
-import com.es.core.dao.ColorDao;
 import com.es.core.dao.impl.mapper.PhoneMapper;
 import com.es.core.model.phone.Phone;
 import com.es.core.dao.PhoneDao;
 import com.es.core.model.phone.sortEnam.SortField;
 import com.es.core.model.phone.sortEnam.SortOrder;
-import com.es.core.dao.StockDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,12 +36,10 @@ public class JdbcPhoneDao implements PhoneDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
     @Resource
-    private ColorDao colorDao;
-    @Resource
-    private StockDao stockDao;
+    private PhoneMapper phoneMapper;
 
     public Optional<Phone> get(final Long key) {
-        List<Phone> phones = jdbcTemplate.query(QUERY_SELECT_PHONE_BY_ID, new PhoneMapper(colorDao, stockDao), key);
+        List<Phone> phones = jdbcTemplate.query(QUERY_SELECT_PHONE_BY_ID, phoneMapper, key);
         if (!phones.isEmpty()) {
             return Optional.of(phones.get(0));
         }
@@ -69,7 +65,7 @@ public class JdbcPhoneDao implements PhoneDao {
                 .add(QUERY_PHONES_WITH_NOT_NULL_PRICE)
                 .add(getSearchOrderQuery(sort, order, search))
                 .add(QUERY_USE_LIMIT_OFFSET).toString();
-        return jdbcTemplate.query(query, new PhoneMapper(colorDao, stockDao), limit, offset);
+        return jdbcTemplate.query(query, phoneMapper, limit, offset);
     }
 
     private Long getTotalPhonesCountForSale(String search) {

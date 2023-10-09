@@ -6,16 +6,21 @@ import com.es.core.model.phone.Phone;
 import com.es.core.exception.OutOfStockException;
 import com.es.core.service.CartService;
 import com.es.core.service.PhoneService;
+import com.es.core.service.StockService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class HttpSessionCartService implements CartService {
     @Resource
     private PhoneService phoneService;
+    @Resource
+    private StockService stockService;
     @Resource
     private Cart cart;
 
@@ -63,6 +68,26 @@ public class HttpSessionCartService implements CartService {
                 .filter(item -> phoneId.equals(item.getPhone().getId()))
                 .findAny()
                 .ifPresent(cart.getItems()::remove);
+        recalculateCart();
+    }
+
+    @Override
+    public void updateCartBeforeOrder() throws OutOfStockException {
+        List<CartItem> updatedCartItems = cart.getItems().stream()
+                .filter(cartItem ->
+                        stockService.getAvailableCountForOrder(cartItem.getPhone().getId()) >= cartItem.getQuantity())
+                .collect(Collectors.toList());
+        boolean isUpdated = cart.getItems().size() != updatedCartItems.size();
+        cart.setItems(updatedCartItems);
+        if (isUpdated) {
+            recalculateCart();
+            throw new OutOfStockException();
+        }
+    }
+
+    @Override
+    public void clearCart() {
+        cart.getItems().clear();
         recalculateCart();
     }
 

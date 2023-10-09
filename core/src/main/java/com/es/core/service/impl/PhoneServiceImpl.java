@@ -9,6 +9,7 @@ import com.es.core.service.PhoneService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -23,6 +24,7 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
+    @Transactional
     public void save(Phone phone) {
         phoneDao.save(phone);
     }
