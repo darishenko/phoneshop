@@ -1,11 +1,11 @@
 package com.es.core.dao.impl;
 
-import com.es.core.dao.ColorDao;
 import com.es.core.dao.OrderDao;
-import com.es.core.dao.StockDao;
 import com.es.core.dao.impl.mapper.OrderMapper;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
+import com.es.core.model.order.OrderStatus;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -23,8 +23,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class JdbcOrderDao implements OrderDao {
-    public static final String QUERY_INSERT_ORDER_ITEM = "insert into ORDER_ITEMS (phoneId, quantity, orderId) values (?, ?, ?)";
-    public static final String QUERY_SELECT_ORDER_BY_SECURE_ID = "select * from ORDERS as ord inner join ORDER_ITEMS as item on ord.id = item.orderId inner join PHONES as ph on item.phoneId = ph.id where ord.secureId = ?";
+    private static final String QUERY_SELECT_ORDERS = "select * from ORDERS ";
+    private static final String QUERY_WHERE_ID = " where ORDERS.id = ? ";
+    private static final String QUERY_WHERE_SECURE_ID = " where ORDERS.secureId = ? ";
+    private static final String QUERY_UPDATE_ORDER_STATUS = "update ORDERS set status = ? where id = ?";
+    private static final String QUERY_JOIN_ORDER_ITEMS_JOIN_PHONES = " inner join ORDER_ITEMS as item on ORDERS.id = item.orderId inner join PHONES as ph on item.phoneId = ph.id ";
+    private static final String QUERY_SELECT_BY_ID = QUERY_SELECT_ORDERS + QUERY_JOIN_ORDER_ITEMS_JOIN_PHONES + QUERY_WHERE_ID;
+    private static final String QUERY_INSERT_ORDER_ITEM = "insert into ORDER_ITEMS (phoneId, quantity, orderId) values (?, ?, ?)";
+    private static final String QUERY_SELECT_ORDER_BY_SECURE_ID = QUERY_SELECT_ORDERS + QUERY_JOIN_ORDER_ITEMS_JOIN_PHONES + QUERY_WHERE_SECURE_ID;
     private static final String QUERY_INSERT_ORDER = "insert into ORDERS (secureId, subtotal, deliveryPrice, totalPrice, firstName, lastName, deliveryAddress, contactPhoneNo, additionalInfo, status) values (?, ? ,?, ?, ?, ?, ?, ?, ?, ?)";
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -32,13 +38,15 @@ public class JdbcOrderDao implements OrderDao {
     private OrderMapper orderMapper;
 
     @Override
+    public Optional<Order> getById(Long id) {
+        List<Order> orders = jdbcTemplate.query(QUERY_SELECT_BY_ID, orderMapper, id);
+        return getOptionalOfOrderFromList(orders);
+    }
+
+    @Override
     public Optional<Order> getBySecureId(UUID secureId) {
         List<Order> orders = jdbcTemplate.query(QUERY_SELECT_ORDER_BY_SECURE_ID, orderMapper, secureId.toString());
-        if (!orders.isEmpty()) {
-            orders.get(0).setOrderItems(getAllOrderItems(orders));
-            return Optional.of(orders.get(0));
-        }
-        return Optional.empty();
+        return getOptionalOfOrderFromList(orders);
     }
 
     @Override
@@ -51,6 +59,24 @@ public class JdbcOrderDao implements OrderDao {
         }, keyHolder);
         order.setId((Long) keyHolder.getKey());
         saveOrderItems(order);
+    }
+
+    @Override
+    public List<Order> getOrders() {
+        return jdbcTemplate.query(QUERY_SELECT_ORDERS, new BeanPropertyRowMapper<>(Order.class));
+    }
+
+    @Override
+    public void setStatus(Long id, OrderStatus status) {
+        jdbcTemplate.update(QUERY_UPDATE_ORDER_STATUS, status.name(), id);
+    }
+
+    private Optional<Order> getOptionalOfOrderFromList(List<Order> orders) {
+        if (!orders.isEmpty()) {
+            orders.get(0).setOrderItems(getAllOrderItems(orders));
+            return Optional.of(orders.get(0));
+        }
+        return Optional.empty();
     }
 
     private List<OrderItem> getAllOrderItems(List<Order> orders) {

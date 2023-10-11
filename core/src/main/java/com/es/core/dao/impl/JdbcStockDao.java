@@ -2,7 +2,6 @@ package com.es.core.dao.impl;
 
 import com.es.core.model.stock.Stock;
 import com.es.core.dao.StockDao;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -14,13 +13,12 @@ import java.util.Map;
 
 @Component
 public class JdbcStockDao implements StockDao {
-    public static final String QUERY_WHERE_PHONE_ID = " where phoneId = ?";
-    public static final String QUERY_AVAILABLE_COUNT_FOR_ORDER = "select STOCK - RESERVED as diff from STOCKS " + QUERY_WHERE_PHONE_ID;
-    public static final String QUERY_REDUCE_PHONE_STOCK = "update STOCKS set stock = (stock - ?) " + QUERY_WHERE_PHONE_ID;
+    private static final String QUERY_WHERE_PHONE_ID = " where phoneId = ?";
+    private static final String QUERY_AVAILABLE_COUNT_FOR_ORDER = "select STOCK - RESERVED as diff from STOCKS " + QUERY_WHERE_PHONE_ID;
+    private static final String QUERY_REDUCE_PHONE_STOCK = "update STOCKS set stock = (stock - ?) " + QUERY_WHERE_PHONE_ID;
     private static final String QUERY_SELECT_PHONE_STOCK = "select * from STOCKS " + QUERY_WHERE_PHONE_ID;
     @Resource
     private JdbcTemplate jdbcTemplate;
-
 
     @Override
     public Stock getPhoneStock(Long phoneId) {

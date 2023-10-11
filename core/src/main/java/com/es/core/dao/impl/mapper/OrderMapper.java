@@ -17,9 +17,9 @@ import java.util.Collections;
 @Component
 @AllArgsConstructor
 public class OrderMapper implements RowMapper<Order> {
-    public static final String COLUMN_ORDER_ID = "ORDERS.ID";
-    public static final String COLUMN_ORDER_ITEM_ID = "ORDER_ITEMS.ID";
-    public static final String COLUMN_ORDER_ITEM_QUANTITY = "ORDER_ITEMS.QUANTITY";
+    private static final String COLUMN_ORDER_ID = "ORDERS.ID";
+    private static final String COLUMN_ORDER_ITEM_ID = "ORDER_ITEMS.ID";
+    private static final String COLUMN_ORDER_ITEM_QUANTITY = "ORDER_ITEMS.QUANTITY";
     @Resource
     private PhoneMapper phoneMapper;
 

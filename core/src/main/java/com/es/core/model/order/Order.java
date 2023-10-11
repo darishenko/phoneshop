@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,8 @@ public class Order {
     private String deliveryAddress;
     private String contactPhoneNo;
     private String additionalInfo;
+
+    private LocalDateTime date;
 
     public Order(List<OrderItem> orderItems, BigDecimal subtotal) {
         this.orderItems = orderItems;

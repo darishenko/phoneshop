@@ -4,7 +4,7 @@
 <jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
 
 
-<tags:master pageTitle="Phones" cart="${cart}"></tags:master>
+<tags:master pageTitle="Phones" _cart="${cart}"/>
 <p class="text-center">Found
     <c:out value="${phones.totalElements}"/> phones.
 <p></p>
@@ -14,27 +14,27 @@
     </label>
     <button class="btn btn-dark">Search</button>
 </form>
-<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"></tags:pager>
+<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"/>
 <table class="table table-bordered">
     <thead class="table-dark">
     <tr>
         <td>Image</td>
         <td>Brand
-            <tags:sortLink sort="brand" order="asc"></tags:sortLink>
-            <tags:sortLink sort="brand" order="desc"></tags:sortLink>
+            <tags:sortLink sort="brand" order="asc"/>
+            <tags:sortLink sort="brand" order="desc"/>
         </td>
         <td>Model
-            <tags:sortLink sort="model" order="asc"></tags:sortLink>
-            <tags:sortLink sort="model" order="desc"></tags:sortLink>
+            <tags:sortLink sort="model" order="asc"/>
+            <tags:sortLink sort="model" order="desc"/>
         </td>
         <td>Color</td>
         <td>Display size
-            <tags:sortLink sort="displaySizeInches" order="asc"></tags:sortLink>
-            <tags:sortLink sort="displaySizeInches" order="desc"></tags:sortLink>
+            <tags:sortLink sort="displaySizeInches" order="asc"/>
+            <tags:sortLink sort="displaySizeInches" order="desc"/>
         </td>
         <td>Price
-            <tags:sortLink sort="price" order="asc"></tags:sortLink>
-            <tags:sortLink sort="price" order="desc"></tags:sortLink>
+            <tags:sortLink sort="price" order="asc"/>
+            <tags:sortLink sort="price" order="desc"/>
         </td>
         <td>Quantity</td>
         <td>Action</td>
@@ -73,4 +73,4 @@
         </tr>
     </c:forEach>
 </table>
-<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"></tags:pager>
+<tags:pager pageCount="${phones.totalPages}" currentPage="${phones.number + 1}"/>

@@ -21,7 +21,7 @@ import static com.es.phoneshop.web.controller.constant.ControllerConstant.Succes
 @Controller
 @RequestMapping(value = "/ajaxCart")
 public class AjaxCartController {
-    public static final String BINDING_RESULT_QUANTITY_FIELD = "quantity";
+    private static final String BINDING_RESULT_QUANTITY_FIELD = "quantity";
     @Resource
     private CartService cartService;
 

@@ -34,6 +34,11 @@ public class OrderServiceImpl implements OrderService {
     private BigDecimal deliveryPrice;
 
     @Override
+    public Order getOrder(Long id) throws OrderNotFoundException {
+        return orderDao.getById(id).orElseThrow(() -> new OrderNotFoundException(id));
+    }
+
+    @Override
     public Order createOrder(Cart cart) {
         Order order = new Order();
         order.setOrderItems(getOrderItemsFromCart(cart, order));
@@ -56,6 +61,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderBySecureId(UUID secureId) throws OrderNotFoundException {
         return orderDao.getBySecureId(secureId).orElseThrow(() -> new OrderNotFoundException(secureId));
+    }
+
+    @Override
+    public List<Order> getOrders() {
+        return orderDao.getOrders();
+    }
+
+    @Override
+    public void setOrderStatus(Long id, OrderStatus status) {
+        orderDao.setStatus(id, status);
     }
 
     private List<OrderItem> getOrderItemsFromCart(Cart cart, Order order) {
