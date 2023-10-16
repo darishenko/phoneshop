@@ -8,8 +8,14 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class OrderNotFoundException extends RuntimeException {
-    public static final String ORDER_WITH_SECURE_ID_NOT_FOUND = "Order with ID %s not found.";
+    private static final String ORDER_WITH_SECURE_ID_NOT_FOUND = "Order with ID %s not found.";
+    private Long id;
     private UUID secureId;
+
+    public OrderNotFoundException(Long id) {
+        super(String.format(ORDER_WITH_SECURE_ID_NOT_FOUND, id));
+        this.id = id;
+    }
 
     public OrderNotFoundException(UUID secureId) {
         super(String.format(ORDER_WITH_SECURE_ID_NOT_FOUND, secureId));

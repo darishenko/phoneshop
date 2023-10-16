@@ -6,7 +6,7 @@
 <jsp:useBean id="cart" scope="session" class="com.es.core.model.cart.Cart"/>
 
 
-<tags:master pageTitle="Order" cart="${cart}"/>
+<tags:master pageTitle="Order" _cart="${cart}"/>
 <a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
 

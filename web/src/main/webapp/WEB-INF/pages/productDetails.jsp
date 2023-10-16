@@ -10,7 +10,7 @@
 </style>
 
 
-<tags:master pageTitle="Phones" cart="${cart}"></tags:master>
+<tags:master pageTitle="Phone details" _cart="${cart}"/>
 <a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
 
@@ -32,7 +32,8 @@
                     <p id="${phone.id}_addToCartResultMessage" class="addToCartResultMessage"></p>
                     <div class="mt-2">
                         <button class="btn btn-primary"
-                                onclick="add_phone_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to cart
+                                onclick="add_phone_to_cart(${phone.id}, '${pageContext.request.contextPath}')">Add to
+                            cart
                         </button>
                     </div>
                 </div>

@@ -7,6 +7,9 @@ public interface ControllerConstant {
         String CART = "cart";
         String ORDER = "order";
         String ORDER_OVERVIEW = "orderOverview";
+        String ORDERS_FOR_ADMIN = "adminOrders";
+        String ORDER_FOR_ADMIN = "adminOrderOverview";
+
     }
 
     interface ModelsAttribute {
@@ -16,6 +19,7 @@ public interface ControllerConstant {
         String CART_DTO = "cartDto";
         String ORDER_DETAIL_DTO = "orderDetails";
         String ORDER = "order";
+        String ORDERS = "orders";
     }
 
     interface RequestParameter {

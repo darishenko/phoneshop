@@ -1,11 +1,8 @@
 package com.es.core.model.order;
 
 import com.es.core.model.phone.Phone;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
