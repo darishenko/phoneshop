@@ -28,7 +28,7 @@
     <c:forEach var="order" items="${orders}">
         <tr>
             <td>
-                <a href="${pageContext.request.contextPath}/admin/orders/${order.id}">${order.id}</a>
+                <a href="<c:url value="/admin/orders/${order.id}" />">${order.id}</a>
             </td>
             <td>${order.firstName} ${order.lastName}</td>
             <td>${order.contactPhoneNo}</td>

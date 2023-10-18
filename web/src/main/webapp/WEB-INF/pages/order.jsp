@@ -7,7 +7,7 @@
 
 
 <tags:master pageTitle="Order" _cart="${cart}"/>
-<a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
+<a href="<c:url value="/productList" />" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
 
 <form:form modelAttribute="orderDetails" method="POST">

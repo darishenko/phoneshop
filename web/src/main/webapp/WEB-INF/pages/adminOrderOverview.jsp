@@ -12,7 +12,7 @@
         <p class="col fs-4 text-end">Order status: ${order.status}</p>
     </div>
 </div>
-<a href="${pageContext.request.contextPath}/admin/orders" class="col btn btn-primary my-3 fw-bold w-100">Back</a>
+<a href="<c:url value="/admin/orders" />" class="col btn btn-primary my-3 fw-bold w-100">Back</a>
 <tags:orderItemsList itemsList="${order.orderItems}" subtotal="${order.subtotal}" delivery="${order.deliveryPrice}"
                      total="${order.totalPrice}"/>
 <tags:orderDetails order="${order}"/>
