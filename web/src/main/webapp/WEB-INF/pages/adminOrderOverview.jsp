@@ -12,7 +12,7 @@
         <p class="col fs-4 text-end">Order status: ${order.status}</p>
     </div>
 </div>
-<a href="${pageContext.request.contextPath}/admin/orders" class="col btn btn-primary my-3 fw-bold w-100">Back</a>
+<a href="<c:url value="/admin/orders" />" class="col btn btn-primary my-3 fw-bold w-100">Back</a>
 <tags:orderItemsList itemsList="${order.orderItems}" subtotal="${order.subtotal}" delivery="${order.deliveryPrice}"
                      total="${order.totalPrice}"/>
 <tags:orderDetails order="${order}"/>
@@ -22,7 +22,7 @@
             <input type="hidden" name="orderStatus" value="DELIVERED">
             <button type="submit" class="btn btn btn-success my-3 fw-bold">Delivered</button>
         </form:form>
-        <form:form method="PUT" cssClass="col text-end">
+        <form:form method="POST" cssClass="col text-end">
             <input type="hidden" name="orderStatus" value="REJECTED">
             <button type="submit" class="btn btn-danger my-3 fw-bold">Rejected</button>
         </form:form>

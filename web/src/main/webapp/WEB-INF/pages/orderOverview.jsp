@@ -6,7 +6,7 @@
 
 
 <tags:master pageTitle="Order owerview" _cart="${cart}"/>
-<a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
+<a href="<c:url value="/productList" />" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
 <h2>Thank you for your order!</h2>
 <tags:orderItemsList itemsList="${order.orderItems}" subtotal="${order.subtotal}" delivery="${order.deliveryPrice}"

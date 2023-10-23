@@ -7,11 +7,11 @@
 
 
 <tags:master pageTitle="Cart" _cart="${cart}"/>
-<a href="${pageContext.request.contextPath}/productList" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
+<a href="<c:url value="/productList" />" class="btn btn-primary my-3 w-100 fw-bold">Back to phone
     list</a>
-<a href="${pageContext.request.contextPath}/order" class="btn btn-primary btn-lg">Order</a>
+<a href="<c:url value="/order" />" class="btn btn-primary btn-lg">Order</a>
 
-<form:form modelAttribute="cartDto" method="PUT">
+<form:form modelAttribute="cartDto" method="POST">
     <table class="table table-bordered my-3">
         <thead class="table-dark">
         <tr>
@@ -28,7 +28,7 @@
             <tr>
                 <td>${item.phone.brand}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/productDetails/${item.phone.id}">
+                    <a href="<c:url value="/productDetails/${item.phone.id}" />">
                             ${item.phone.model}
                     </a>
                 </td>
@@ -61,5 +61,5 @@
     </table>
 
     <input type="submit" value="Update" class="btn btn-primary btn-lg"/>
-    <a href="${pageContext.request.contextPath}/order" class="btn btn-primary btn-lg">Order</a>
+    <a href="<c:url value="/order" />" class="btn btn-primary btn-lg">Order</a>
 </form:form>

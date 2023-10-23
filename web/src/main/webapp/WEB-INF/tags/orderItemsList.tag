@@ -22,7 +22,7 @@
     <tr>
         <td>${item.phone.brand}</td>
         <td>
-            <a href="${pageContext.request.contextPath}/productDetails/${item.phone.id}">
+            <a href="<c:url value="/productDetails/${item.phone.id}" />">
                     ${item.phone.model}
             </a>
         </td>

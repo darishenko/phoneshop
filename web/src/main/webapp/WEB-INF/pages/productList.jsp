@@ -47,7 +47,7 @@
             </td>
             <td>${phone.brand}</td>
             <td>
-                <a href="${pageContext.request.contextPath}/productDetails/${phone.id}">
+                <a href="<c:url value="/productDetails/${phone.id}" />">
                         ${phone.model}
                 </a>
             </td>
