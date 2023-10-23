@@ -33,7 +33,7 @@ public class CartPageController {
         return JspPage.CART;
     }
 
-    @PutMapping
+    @PostMapping
     public String updateCart(@Valid @ModelAttribute CartDto cartDto, BindingResult bindingResult, Model model) {
         if (Objects.nonNull(cartDto.getCartItems())) {
             tryToUpdateAllCartItemsSeparately(cartDto, bindingResult);

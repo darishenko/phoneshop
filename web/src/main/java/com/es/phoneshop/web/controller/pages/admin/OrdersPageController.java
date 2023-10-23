@@ -6,10 +6,7 @@ import com.es.phoneshop.web.controller.constant.ControllerConstant.ModelsAttribu
 import com.es.phoneshop.web.controller.constant.ControllerConstant.JspPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -31,7 +28,7 @@ public class OrdersPageController {
         return JspPage.ORDER_FOR_ADMIN;
     }
 
-    @PutMapping("/{orderId}")
+    @PostMapping("/{orderId}")
     public String changeOrderStatus(@PathVariable Long orderId, OrderStatus orderStatus) {
         orderService.setOrderStatus(orderId, orderStatus);
         return "redirect:/admin/orders/" + orderId;

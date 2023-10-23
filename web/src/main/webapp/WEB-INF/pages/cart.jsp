@@ -11,7 +11,7 @@
     list</a>
 <a href="<c:url value="/order" />" class="btn btn-primary btn-lg">Order</a>
 
-<form:form modelAttribute="cartDto" method="PUT">
+<form:form modelAttribute="cartDto" method="POST">
     <table class="table table-bordered my-3">
         <thead class="table-dark">
         <tr>

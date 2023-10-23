@@ -22,7 +22,7 @@
             <input type="hidden" name="orderStatus" value="DELIVERED">
             <button type="submit" class="btn btn btn-success my-3 fw-bold">Delivered</button>
         </form:form>
-        <form:form method="PUT" cssClass="col text-end">
+        <form:form method="POST" cssClass="col text-end">
             <input type="hidden" name="orderStatus" value="REJECTED">
             <button type="submit" class="btn btn-danger my-3 fw-bold">Rejected</button>
         </form:form>
