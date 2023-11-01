@@ -8,7 +8,9 @@ public interface CartService {
 
     Cart getCart();
 
-    void addPhone(Long phoneId, Long quantity);
+    void addPhoneById(Long phoneId, Long quantity);
+
+    void addPhoneByModel(String model, Long quantity);
 
     boolean tryToUpdate(Long phoneId, Long quantity);
 

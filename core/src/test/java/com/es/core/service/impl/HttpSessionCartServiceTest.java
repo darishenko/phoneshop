@@ -57,9 +57,9 @@ public class HttpSessionCartServiceTest {
     public void addPhone_phoneNotFromCart_addPhoneToCart() {
         cart.getItems().clear();
         Long quantity = 2L;
-        when(phoneService.get(any())).thenReturn(phone);
+        when(phoneService.getById(any())).thenReturn(phone);
 
-        httpSessionCartService.addPhone(phone.getId(), quantity);
+        httpSessionCartService.addPhoneById(phone.getId(), quantity);
 
         assertEquals(1, cart.getItems().size());
         assertEquals(phone, cart.getItems().get(0).getPhone());
@@ -71,9 +71,9 @@ public class HttpSessionCartServiceTest {
     public void addPhone_quantityMoreThanPhoneStock_OutOfStockException() {
         cart.getItems().clear();
         Long quantity = (long) (phone.getStock().getStock() - phone.getStock().getReserved() + 1);
-        when(phoneService.get(any())).thenReturn(phone);
+        when(phoneService.getById(any())).thenReturn(phone);
 
-        httpSessionCartService.addPhone(phone.getId(), quantity);
+        httpSessionCartService.addPhoneById(phone.getId(), quantity);
     }
 
     @Test
@@ -82,9 +82,9 @@ public class HttpSessionCartServiceTest {
         Long expectedQuantity = quantity * 2;
         BigDecimal expectedTotalCost = phone.getPrice().multiply(BigDecimal.valueOf(expectedQuantity));
         addNewPhoneToCart(new ArrayList<>(), phone, quantity);
-        when(phoneService.get(any())).thenReturn(phone);
+        when(phoneService.getById(any())).thenReturn(phone);
 
-        httpSessionCartService.addPhone(phone.getId(), quantity);
+        httpSessionCartService.addPhoneById(phone.getId(), quantity);
 
         assertEquals(1, cart.getItems().size());
         assertEquals(phone, cart.getItems().get(0).getPhone());
@@ -100,9 +100,9 @@ public class HttpSessionCartServiceTest {
         addNewPhoneToCart(new ArrayList<>(), phone, phoneQuantity);
         BigDecimal expectedTotalCost = phone.getPrice().multiply(BigDecimal.valueOf(phoneQuantity))
                 .add(newPhone.getPrice().multiply(BigDecimal.valueOf(newPhoneQuantity)));
-        when(phoneService.get(newPhone.getId())).thenReturn(newPhone);
+        when(phoneService.getById(newPhone.getId())).thenReturn(newPhone);
 
-        httpSessionCartService.addPhone(newPhone.getId(), newPhoneQuantity);
+        httpSessionCartService.addPhoneById(newPhone.getId(), newPhoneQuantity);
 
         assertEquals(2, cart.getItems().size());
         assertTrue(isPhoneInCart(newPhone));

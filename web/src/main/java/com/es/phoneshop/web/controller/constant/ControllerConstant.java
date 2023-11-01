@@ -9,7 +9,7 @@ public interface ControllerConstant {
         String ORDER_OVERVIEW = "orderOverview";
         String ORDERS_FOR_ADMIN = "adminOrders";
         String ORDER_FOR_ADMIN = "adminOrderOverview";
-
+        String QUICK_CART_ADDING = "quickCartAdding";
     }
 
     interface ModelsAttribute {
@@ -20,6 +20,8 @@ public interface ControllerConstant {
         String ORDER_DETAIL_DTO = "orderDetails";
         String ORDER = "order";
         String ORDERS = "orders";
+        String QUICK_CART_ADDING_DTO = "quickCartAddingDto";
+        String ADDED_PHONES = "addedPhones";
     }
 
     interface RequestParameter {
@@ -36,6 +38,7 @@ public interface ControllerConstant {
     }
 
     interface SuccessMessage {
+        String ALL_ADDED_TO_CART = "All phones added to cart successfully!";
         String ADD_TO_CART = "Phone added to cart successfully!";
         String UPDATE = "Updated successfully!";
     }

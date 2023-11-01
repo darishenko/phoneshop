@@ -40,7 +40,7 @@ public class JdbcPhoneDaoIntTest {
 
     @Test
     public void get_existingPhoneId_getPhone() {
-        Optional<Phone> phone = phoneDao.get(EXISTING_PHONE_ID);
+        Optional<Phone> phone = phoneDao.getById(EXISTING_PHONE_ID);
 
         assertTrue(phone.isPresent());
         assertEquals(EXISTING_PHONE_ID, phone.get().getId());
@@ -48,7 +48,7 @@ public class JdbcPhoneDaoIntTest {
 
     @Test
     public void get_nonExistingPhoneId_getPhone() {
-        Optional<Phone> phone = phoneDao.get(NON_EXISTING_PHONE_ID);
+        Optional<Phone> phone = phoneDao.getById(NON_EXISTING_PHONE_ID);
 
         assertFalse(phone.isPresent());
     }

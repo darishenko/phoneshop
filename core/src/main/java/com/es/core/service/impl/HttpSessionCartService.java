@@ -30,19 +30,15 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
-    public void addPhone(Long phoneId, Long quantity) {
-        Phone phone = phoneService.get(phoneId);
-        CartItem cartItem = getCartItemByPhoneId(phoneId);
-        if (Objects.isNull(cartItem)) {
-            cartItem = new CartItem(phone, 0L);
-        }
-        long availableQuantity = getAvailablePhoneQuantity(phone);
-        if (quantity <= availableQuantity - cartItem.getQuantity()) {
-            addPhoneToCart(cartItem, cartItem.getQuantity() + quantity);
-            recalculateCart();
-        } else {
-            throw new OutOfStockException(phone.getId(), quantity, availableQuantity, cartItem.getQuantity());
-        }
+    public void addPhoneById(Long phoneId, Long quantity) {
+        Phone phone = phoneService.getById(phoneId);
+        addPhone(phone, quantity);
+    }
+
+    @Override
+    public void addPhoneByModel(String model, Long quantity) {
+        Phone phone = phoneService.getByModel(model.trim());
+        addPhone(phone, quantity);
     }
 
     @Override
@@ -89,6 +85,20 @@ public class HttpSessionCartService implements CartService {
     public void clearCart() {
         cart.getItems().clear();
         recalculateCart();
+    }
+
+    private void addPhone(Phone phone, Long quantity) {
+        CartItem cartItem = getCartItemByPhoneId(phone.getId());
+        if (Objects.isNull(cartItem)) {
+            cartItem = new CartItem(phone, 0L);
+        }
+        long availableQuantity = getAvailablePhoneQuantity(phone);
+        if (quantity <= availableQuantity - cartItem.getQuantity()) {
+            addPhoneToCart(cartItem, cartItem.getQuantity() + quantity);
+            recalculateCart();
+        } else {
+            throw new OutOfStockException(phone.getId(), quantity, availableQuantity, cartItem.getQuantity());
+        }
     }
 
     private Integer getAvailablePhoneQuantity(Phone phone) {
