@@ -29,6 +29,10 @@
                         </sec:authorize>
                     </li>
                     <li class="nav-item">
+                        <a href="<c:url value="/quickCartAdding" />" class="nav-link active fw-bold">Quick cart
+                            adding</a>
+                    </li>
+                    <li class="nav-item">
                         <sec:authorize access="!isAuthenticated()">
                             <a href="<c:url value="/login" />" class="nav-link active fw-bold">Login</a>
                         </sec:authorize>
@@ -43,7 +47,8 @@
                         <div class="row">
                             <div class="col nav-item">
                                 <sec:authorize access="isAuthenticated()">
-                                    <p class="navbar-text fw-bold text-light">Welcome, <sec:authentication property="name"/>!</p>
+                                    <p class="navbar-text fw-bold text-light">Welcome, <sec:authentication
+                                            property="name"/>!</p>
                                 </sec:authorize>
                             </div>
                             <div class="col">

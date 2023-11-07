@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface PhoneDao {
-    Optional<Phone> get(Long key);
+    Optional<Phone> getById(Long key);
+
+    Optional<Phone> getByModel(String model);
 
     void save(Phone phone);
 

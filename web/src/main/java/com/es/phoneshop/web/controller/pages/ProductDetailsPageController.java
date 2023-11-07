@@ -20,7 +20,7 @@ public class ProductDetailsPageController {
 
     @GetMapping("/{phoneId}")
     public String showPhoneDetails(@PathVariable Long phoneId, Model model) {
-        model.addAttribute(ModelsAttribute.PHONE, phoneService.get(phoneId));
+        model.addAttribute(ModelsAttribute.PHONE, phoneService.getById(phoneId));
         model.addAttribute(ModelsAttribute.CART, cartService.getCart());
         return JspPage.PRODUCT_DETAILS;
     }

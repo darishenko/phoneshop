@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PhoneService {
-    Phone get(Long key) throws PhoneNotFoundException;
+    Phone getById(Long key) throws PhoneNotFoundException;
+
+    Phone getByModel(String model) throws PhoneNotFoundException;
 
     void save(Phone phone);
 

@@ -33,7 +33,7 @@ public class AjaxCartController {
             return ResponseEntity.badRequest().body(errorMessage);
         }
         try {
-            cartService.addPhone(cartItemDto.getPhoneId(), cartItemDto.getQuantity());
+            cartService.addPhoneById(cartItemDto.getPhoneId(), cartItemDto.getQuantity());
             return ResponseEntity.ok(createAddToCartResponse());
         } catch (OutOfStockException exception) {
             return ResponseEntity.badRequest().body(exception);

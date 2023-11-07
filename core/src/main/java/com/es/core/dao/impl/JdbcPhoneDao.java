@@ -32,14 +32,24 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String QUERY_PHONES_WITH_NOT_NULL_PRICE = " and price is not NULL";
     private static final String QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK = QUERY_SELECT_FROM_PHONES + QUERY_PHONES_WITH_POSITIVE_STOCK;
     private static final String QUERY_SELECT_PHONES_COUNT_WITH_POSITIVE_STOCK = "select count(*) from PHONES" + QUERY_PHONES_WITH_POSITIVE_STOCK;
+    private static final String QUERY_SELECT_PHONE_BY_MODEL_FOR_SALE = QUERY_SELECT_PHONES_WITH_POSITIVE_STOCK + QUERY_PHONES_WITH_NOT_NULL_PRICE + " and lower(model) = lower(?) ";
     private static final String SPACE = " ";
     @Resource
     private JdbcTemplate jdbcTemplate;
     @Resource
     private PhoneMapper phoneMapper;
 
-    public Optional<Phone> get(final Long key) {
+    public Optional<Phone> getById(final Long key) {
         List<Phone> phones = jdbcTemplate.query(QUERY_SELECT_PHONE_BY_ID, phoneMapper, key);
+        if (!phones.isEmpty()) {
+            return Optional.of(phones.get(0));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Phone> getByModel(String model) {
+        List<Phone> phones = jdbcTemplate.query(QUERY_SELECT_PHONE_BY_MODEL_FOR_SALE, phoneMapper, model);
         if (!phones.isEmpty()) {
             return Optional.of(phones.get(0));
         }
